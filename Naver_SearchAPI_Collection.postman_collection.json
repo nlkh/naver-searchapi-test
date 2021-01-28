@@ -1,0 +1,5149 @@
+{
+	"info": {
+		"_postman_id": "d56e8359-0026-4f5f-a509-f658d73660a6",
+		"name": "Naver_SearchAPI_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "MovieSearchAPI",
+			"item": [
+				{
+					"name": "Response Validation",
+					"item": [
+						{
+							"name": "Only Requirement",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : 필수 Parameter만 작성하여 API Request를 보냈을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Response has lastBuildDate\", function () {\r",
+											"    // Response에 lastBuildDate 속성의 존재여부\r",
+											"    pm.response.to.have.jsonBody(\"lastBuildDate\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of lastBuildDate is String(Datetime)\", function () {\r",
+											"    // lastBuildDate의 Datatype 검증\r",
+											"    pm.expect(typeof(jsonData.lastBuildDate)).to.be.eql('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"lastBuildDate is latest\", function () {\r",
+											"    // lastBuildDate와 현재시간(밀리초 단위)의 차이를 이용해 데이터의 최신 여부 확인\r",
+											"    var buildTime = new Date(jsonData.lastBuildDate);\r",
+											"    var current = Date.now();\r",
+											"    pm.expect(current-buildTime).to.below(3600*1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has total\", function () {\r",
+											"    // Response에 total 속성의 존재여부\r",
+											"    pm.response.to.have.jsonBody('total');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of total is number\", function () {\r",
+											"    // lastBuildDate의 Datatype 검증\r",
+											"    pm.expect(typeof(jsonData.total)).to.be.eql('number');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"total is the number of items\", function () {\r",
+											"    // total의 값이 item의 갯수와 같은지 비교\r",
+											"    pm.expect(jsonData.total).to.be.eql(jsonData.items.length)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has items\", function () {\r",
+											"    // Response에 items 속성의 존재 여부\r",
+											"    pm.response.to.have.jsonBody('items');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of items is Object\", function () {\r",
+											"    // items의 Datatype 검증\r",
+											"    pm.expect(typeof(jsonData.items)).to.be.eql('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have title\", function () {\r",
+											"    // 모든 item에 title 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('title');\r",
+											"        // pm.expect(item.title).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have link\", function () {\r",
+											"    // 모든 item에 link 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('link');\r",
+											"        // pm.expect(item.link).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have image URL\", function () {\r",
+											"    // 모든 item에 image 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('image');\r",
+											"        // pm.expect(item.image).not.to.be.empty;\r",
+											"\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have subtitle\", function () {\r",
+											"    // 모든 item에 subtitle 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('subtitle');\r",
+											"        // pm.expect(item.subtitle).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have pubDate\", function () {\r",
+											"    // 모든 item에 pubDate 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('pubDate');\r",
+											"        // pm.expect(item.pubDate).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have director\", function () {\r",
+											"    // 모든 item에 director 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('director');\r",
+											"        // pm.expect(item.director).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have actor\", function () {\r",
+											"    // 모든 item에 actor 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('actor');\r",
+											"        // pm.expect(item.actor).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have userRating\", function () {\r",
+											"    // 모든 item에 userRating 속성의 존재 여부\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('userRating');\r",
+											"        // pm.expect(item.userRating).not.to.be.empty;\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Full Parameter Entered",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : 필수 Parameter, 선택 Parameter 모두 작성하여 API Request를 보냈을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Response has lastBuildDate\", function () {\r",
+											"    pm.response.to.have.jsonBody(\"lastBuildDate\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of lastBuildDate is String(Datetime)\", function () {\r",
+											"    pm.expect(typeof(jsonData.lastBuildDate)).to.be.eql('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"lastBuildDate is latest\", function () {\r",
+											"    var buildTime = new Date(jsonData.lastBuildDate);\r",
+											"    var current = Date.now();\r",
+											"    pm.expect(current-buildTime).to.below(3600*1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has total\", function () {\r",
+											"    pm.response.to.have.jsonBody('total');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of total is number\", function () {\r",
+											"    pm.expect(typeof(jsonData.total)).to.be.eql('number');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"total is the number of items\", function () {\r",
+											"    pm.expect(jsonData.total).to.be.eql(jsonData.items.length)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has items\", function () {\r",
+											"    pm.response.to.have.jsonBody('items');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of items is Array\", function () {\r",
+											"    pm.expect(typeof(jsonData.items)).to.be.eql('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have title\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('title');\r",
+											"        pm.expect(item.title).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have link\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('link');\r",
+											"        pm.expect(item.link).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have image URL\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('image');\r",
+											"        pm.expect(item.image).not.to.be.empty;\r",
+											"\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have subtitle\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('subtitle');\r",
+											"        pm.expect(item.subtitle).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have pubDate\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('pubDate');\r",
+											"        pm.expect(item.pubDate).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have director\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('director');\r",
+											"        pm.expect(item.director).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have actor\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('actor');\r",
+											"        pm.expect(item.actor).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have userRating\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('userRating');\r",
+											"        pm.expect(item.userRating).not.to.be.empty;\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=10&start=10&yearfrom=1990&yearto=2020&genre=2&country=GB",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10"
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "2"
+										},
+										{
+											"key": "country",
+											"value": "GB"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Missing Data Access",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : 선택 Parameter 중 일부를 생략하여 API Request를 보냈을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Response has lastBuildDate\", function () {\r",
+											"    pm.response.to.have.jsonBody(\"lastBuildDate\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of lastBuildDate is String(Datetime)\", function () {\r",
+											"    pm.expect(typeof(jsonData.lastBuildDate)).to.be.eql('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"lastBuildDate is latest\", function () {\r",
+											"    var buildTime = new Date(jsonData.lastBuildDate);\r",
+											"    var current = Date.now();\r",
+											"    pm.expect(current-buildTime).to.below(3600*1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has total\", function () {\r",
+											"    pm.response.to.have.jsonBody('total');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of total is number\", function () {\r",
+											"    pm.expect(typeof(jsonData.total)).to.be.eql('number');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"total is the number of items\", function () {\r",
+											"    pm.expect(jsonData.total).to.be.eql(jsonData.items.length)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has items\", function () {\r",
+											"    pm.response.to.have.jsonBody('items');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Datatype of items is Array\", function () {\r",
+											"    pm.expect(typeof(jsonData.items)).to.be.eql('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have title\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('title');\r",
+											"        pm.expect(item.title).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have link\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('link');\r",
+											"        pm.expect(item.link).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have image URL\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('image');\r",
+											"        pm.expect(item.image).not.to.be.empty;\r",
+											"\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have subtitle\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('subtitle');\r",
+											"        pm.expect(item.subtitle).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have pubDate\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('pubDate');\r",
+											"        pm.expect(item.pubDate).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have director\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('director');\r",
+											"        pm.expect(item.director).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have actor\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('actor');\r",
+											"        pm.expect(item.actor).not.to.be.empty;\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Every item have userRating\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('userRating');\r",
+											"        pm.expect(item.userRating).not.to.be.empty;\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=이경형Kyle(카일)&display=10&start=1&yearfrom=1990&yearto=2020",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "이경형Kyle(카일)"
+										},
+										{
+											"key": "display",
+											"value": "10"
+										},
+										{
+											"key": "start",
+											"value": "1"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "cost",
+											"value": "8000",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "pubDate Validation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : Response의 pubDate가 Request의 yearfrom, yearto 사이인지 검증합니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"var yearto = Number(payload['yearto']);\r",
+											"var yearfrom = Number(payload['yearfrom']);\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"pubDate is between yearfrom and yearto\", function () {\r",
+											"    jsonData.items.forEach(function(item) {\r",
+											"        pm.expect(item).to.have.property('pubDate');\r",
+											"        pm.expect(Number(item.pubDate)).to.be.above(yearfrom-1);\r",
+											"        pm.expect(Number(item.pubDate)).to.be.below(yearto+1);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&yearfrom=1990&yearto=2020",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Display_01",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"display shoud be between(1~100). display : \" + payload['display'], function () {\r",
+											"    if(payload['display'] >= 1 && payload['display'] <= 100)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=0",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Display_02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"display shoud be between(1~100). display : \" + payload['display'], function () {\r",
+											"    if(payload['display'] >= 1 && payload['display'] <= 100)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=1",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Display_03",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"display shoud be between(1~100). display : \" + payload['display'], function () {\r",
+											"    if(payload['display'] >= 1 && payload['display'] <= 100)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=2",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Display_04",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"display shoud be between(1~100). display : \" + payload['display'], function () {\r",
+											"    if(payload['display'] >= 1 && payload['display'] <= 100)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=99",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "99"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Display_05",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"display shoud be between(1~100). display : \" + payload['display'], function () {\r",
+											"    if(payload['display'] >= 1 && payload['display'] <= 100)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=100",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Display_06",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"display shoud be between(1~100). display : \" + payload['display'], function () {\r",
+											"    if(payload['display'] >= 1 && payload['display'] <= 100)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&display=101",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "101"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Start",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"start shoud be between(1~1000). start : \" + payload['start'], function () {\r",
+											"    if(payload['start'] >= 1 && payload['start'] <= 1000)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&start=0",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Start Copy 5",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"start shoud be between(1~1000). start : \" + payload['start'], function () {\r",
+											"    if(payload['start'] >= 1 && payload['start'] <= 1000)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&start=1",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Start Copy 4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"start shoud be between(1~1000). start : \" + payload['start'], function () {\r",
+											"    if(payload['start'] >= 1 && payload['start'] <= 1000)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&start=2",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Start Copy 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"start shoud be between(1~1000). start : \" + payload['start'], function () {\r",
+											"    if(payload['start'] >= 1 && payload['start'] <= 1000)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&start=999",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "999"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Start Copy 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"start shoud be between(1~1000). start : \" + payload['start'], function () {\r",
+											"    if(payload['start'] >= 1 && payload['start'] <= 1000)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&start=1000",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Boundary Value of Start Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start Parameter의 경계값에 대한 검증입니다.\r",
+											"*/\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"pm.test(\"start shoud be between(1~1000). start : \" + payload['start'], function () {\r",
+											"    if(payload['start'] >= 1 && payload['start'] <= 1000)\r",
+											"        pm.response.to.have.status(200);\r",
+											"        \r",
+											"    else\r",
+											"        pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터&start=1001",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Requirement Missing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : 필수 입력 Parameter를 생략하여 Request를 보냈을 때의 Reponse에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE01\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE01\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=10&start=1&yearfrom=1990&yearto=2020",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10"
+										},
+										{
+											"key": "start",
+											"value": "1"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not Existing Country",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : country parameter에 정의되지 않은 값을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Data is not exist\", function () {\r",
+											"    pm.expect(jsonData.total).to.be.eql(0);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=k&country=GH",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "k"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "GH"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not Existing Genre",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : genre parameter에 정의되지 않은 값을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Data is not exist\", function () {\r",
+											"    pm.expect(jsonData.total).to.be.eql(0);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=k&genre=29",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "k"
+										},
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "29"
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Practicing fuzzing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : genre parameter에 정의되지 않은 값을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"var payload = {};\r",
+											"pm.request.url.query.all().forEach((param) => {payload[param.key] = param.value});\r",
+											"\r",
+											"pm.test(\"Status code is 200 \"+ typeof(payload['query']), function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Data is not exist\", function () {\r",
+											"    pm.expect(jsonData.total).to.be.eql(0);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query={{fuzz}}",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "{{fuzz}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Method type",
+					"item": [
+						{
+							"name": "GET Request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : GET method로 api request를 했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST Request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : POST method로 api request를 했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 405\", function () {\r",
+											"    pm.response.to.have.status(405);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT Request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : PUT method로 api request를 했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 405\", function () {\r",
+											"    pm.response.to.have.status(405);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE Request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : DELETE method로 api request를 했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 405\", function () {\r",
+											"    pm.response.to.have.status(405);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "해리포터"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Parameter Exception",
+					"item": [
+						{
+							"name": "Very long Query",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : query parameter에 긴 검색어를 입력했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=10&start=10&yearfrom=1990&yearto=2020&query=해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10"
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량해리포터와마법사의돌살인의추억관상러브액츄얼리터미네이터다크나이트비긴즈어벤져스엔드게임엑시트건축학개론늑대소년조선명탐정신과함께명량"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Symbol Query",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : query parameter에 특수문자를 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=10&start=10&yearfrom=1990&yearto=2020&query=!@%23$",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10"
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "!@#$"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Display_01",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display 범위(1~100)을 넘어서 101을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=101&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "101"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Display_02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display 범위(1~100)을 넘어서 0을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=0&start=10&yearfrom=1990&yearto=2020&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "0"
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Display_03",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display에 int 표현범위(–2,147,483,648~2,147,483,647) 넘어서 2,147,483,648을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=2147483648&start=10&yearfrom=1990&yearto=2020&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "2147483648"
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Display_04",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display에 unsigned int 표현범위(0~4,294,967,295) 넘어서 4,294,967,296을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=4294967306&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "4294967306"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Display_05",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display에 int 표현범위(–2,147,483,648~2,147,483,647) 넘어서 -2,147,483,649를 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=–2147483649&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "–2147483649"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Display_06",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display에 unsigned int 표현범위(0~4,294,967,295) 넘어서 -1을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=-1&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "-1"
+										},
+										{
+											"key": "start",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "String Display",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display에 문자열을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=abcd&start=10&yearfrom=1990&yearto=2020&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "abcd"
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Only Space Display",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : display에 공백만을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE02\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE02\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?display=   &start=10&yearfrom=1990&yearto=2020&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "   "
+										},
+										{
+											"key": "start",
+											"value": "10"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990"
+										},
+										{
+											"key": "yearto",
+											"value": "2020"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Start_01",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start 범위(1~1000)을 넘어서 1001을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=1001&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Start_02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start 범위(1~1000)을 넘어서 0을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=1001&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Start_03",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start에 int 표현범위(–2,147,483,648~2,147,483,647) 넘어서 2,147,483,648을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=2147483648&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "2147483648"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Start_04",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start에 unsigned int 표현범위(0~4,294,967,295) 넘어서 4,294,967,306을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=4294967306&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "4294967306"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Start_05",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start에 int 표현범위(–2,147,483,648~2,147,483,647) 넘어서 -2,147,483,649를 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=–2147483649&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "–2147483649",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "–2147483649"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Start_06",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start에 unsigned int 표현범위(0~4,294,967,295) 넘어서 -1을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=-1&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "-1",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "-1"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "String Start",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start에 문자열을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=A&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "abcd",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "A"
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Only Space Start",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : start에 공백만을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"ErrorCode is SE03\", function () {\r",
+											"    pm.expect(pm.response.json().errorCode).to.be.eql(\"SE03\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?start=   &query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "   ",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "   "
+										},
+										{
+											"key": "yearfrom",
+											"value": "1990",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Yearfrom_01",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom에 1969를 입력했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=1969&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1969"
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Yearfrom_02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom에 -1을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=-1&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "-1"
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Yearfrom_03",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom에 int 표현범위(–2,147,483,648~2,147,483,647) 넘어서 2,147,483,648을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=2147483648&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "2147483648"
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Only Space Yearfrom",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom에 공백만을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=   &query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "   "
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "String Yearfrom",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom에 문자열을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=abcd&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "abcd"
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Yearto_01",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearto에 1969를 입력했을 때의 Response에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearto=1969&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "1969",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "1969"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Yearto_02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearto에 -1을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=-1&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "-1"
+										},
+										{
+											"key": "yearto",
+											"value": "2020",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Out of Bound Yearto_03",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearto에 int 표현범위(–2,147,483,648~2,147,483,647) 넘어서 2,147,483,648을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearto=2147483648&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "2147483648",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "2147483648"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Only Space Yearfrom Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearto에 공백만을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearto=   &query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "   ",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "   "
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "String Yearto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom에 문자열을 입력했을 때에 대한 검증입니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearto=abcd&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "abcd",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "abcd"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Yearfrom over Yearto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : yearfrom이 yearfrom보다 큰 경우를 검증합니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?yearfrom=2020&yearto=1970&query=해리포터",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "display",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "start",
+											"value": "1001",
+											"disabled": true
+										},
+										{
+											"key": "yearfrom",
+											"value": "2020"
+										},
+										{
+											"key": "yearto",
+											"value": "1970"
+										},
+										{
+											"key": "genre",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "country",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "해리포터"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Symbol Filtering_01",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : SQL Injection 방어를 위해 주요 특수문자를 필터링하는지 검증합니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"' should be filtered\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=k'",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "yearfrom",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "1970",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "k'"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Symbol Filtering_02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : SQL Injection 방어를 위해 주요 특수문자를 필터링하는지 검증합니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"' should be filtered\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=;",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "yearfrom",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "1970",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": ";"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Symbol Filtering_03",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*\r",
+											"작성자 : 카일(Kyle)\r",
+											"설명 : SQL Injection 방어를 위해 주요 특수문자를 필터링하는지 검증합니다.\r",
+											"*/\r",
+											"\r",
+											"pm.test(\"' should be filtered\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Naver-Client-Id",
+										"value": "UfRtLjoz5Cpx6vsAy7Bl",
+										"type": "text"
+									},
+									{
+										"key": "X-Naver-Client-Secret",
+										"value": "uMNVqAZR77",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://openapi.naver.com/v1/search/movie.json?query=--",
+									"protocol": "https",
+									"host": [
+										"openapi",
+										"naver",
+										"com"
+									],
+									"path": [
+										"v1",
+										"search",
+										"movie.json"
+									],
+									"query": [
+										{
+											"key": "yearfrom",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "yearto",
+											"value": "1970",
+											"disabled": true
+										},
+										{
+											"key": "query",
+											"value": "--"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
